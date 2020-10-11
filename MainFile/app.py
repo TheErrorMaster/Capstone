@@ -1,15 +1,37 @@
 from tkinter import *
+import random
 
+#Window variables
 root = Tk()
-root.title('CAPSTONE Project')
+root.title('10,000 Dice')
 root.geometry("400x400")
+root.config(bg="black")
+stringme=StringVar()
+
+# Functions
+def randomGen():
+    ls = []
+    dice = ['\u2680', '\u2681', '\u2682', '\u2683', '\u2684', '\u2685']
+    for i in range(10):
+        # ls.append(random.randrange(1,6)) # list of rand int
+        ls.append(random.choice(dice))
+    lis = " ".join(map(str,ls)) # list to string
+    stringme.set(lis)
 
 # Varaiables
-user1_lbl = Button(root, text="one users", height=3, width=20, bg="green")
-user2_lbl = Button(root, text="two users", height=3, width=20, bg="blue")
+title_lbl = Label(root, text="10,000", fg="white", bg="black", font=("Helvetica", 16))
+player_lbl = Label(root, text="Select the Number of Players", fg="white", bg="black", font=("Helvetica", 16))
+user1_btn = Button(root, text="one", height=3, width=20, bg="blue", fg="white")
+user2_btn = Button(root, text="two", height=3, width=20, bg="blue", fg="white")
+user3_btn = Button(root, text="change me", height=3, width=20, bg="blue", fg="white", command=randomGen)
+result_lbl = Label(root, textvariable=stringme, bg="black", fg="white", font=("Helvetica", 30))
 
 # Location
-user1_lbl.place(x=200, y=150, anchor="center")
-user2_lbl.place(x=200, y=250, anchor="center")
+title_lbl.pack()
+player_lbl.pack()
+user1_btn.pack(pady=(10)) # horizontal padding between buttons
+user2_btn.pack(pady=(10))
+user3_btn.pack(pady=(10))
+result_lbl.pack()
 
 root.mainloop()
