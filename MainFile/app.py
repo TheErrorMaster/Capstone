@@ -11,6 +11,13 @@ stringme=StringVar()
 # Functions
 def randomGen():
     ls = []
+    #See below for the dice unicode:
+    #'\u2680' = dice-one
+    #'\u2681' = dice-two
+    #'\u2682' = dice-three
+    #'\u2683' = dice-four
+    #'\u2684' = dice-five
+    #'\u2685' = dice-six
     dice = ['\u2680', '\u2681', '\u2682', '\u2683', '\u2684', '\u2685']
     for i in range(10):
         # ls.append(random.randrange(1,6)) # list of rand int
