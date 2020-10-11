@@ -11,3 +11,27 @@ Make sure to clone our project
 We are implenting the game **"10,000"** Dice and build ai to play with 
 
 ## 
+
+## Instructions
+
+Table of Contents:
+1. Overview of the Game
+2. How to Play
+3. Scoring
+4. Winning the Game
+
+
+#1. Overview of the Game
+===========================================================================
+
+
+#2. How to Play
+===========================================================================
+
+
+#3. Scoring
+===========================================================================
+
+
+#4. Winning the Game
+===========================================================================
