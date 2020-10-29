@@ -2,6 +2,8 @@
 
 # Authors:
 Mauricio Macias (mauricio.macias@csu.fullerton.edu) 890741622 <br/>
+John Tu (jttc98@csu.fullerton.edu) 889857462 <br/>
+Reeder Loveland (rloveland@csu.fullerton.edu) <br/>
 
 ## 0 Installation
 Make sure to clone our project
@@ -35,3 +37,4 @@ Table of Contents:
 
 #4. Winning the Game
 ===========================================================================
+The game continues until one of the players has reached 10000 as their total score. The first player to reach 10000 points is the winner.
