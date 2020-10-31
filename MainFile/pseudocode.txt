@@ -6,6 +6,7 @@ Set title to '10,000 Dice', window size to 400x400, and background color to blac
 Ensure that the window size stays fixed, so disallow users from resizing the window.
 Declare a variable called stringme and set as StringVar().
 Declare a Boolean variable called selected and set to false.
+Declare a variable called cur_score and set to 0.
 
 def randomGen():
 	Declare an empty list called ls.
@@ -19,19 +20,22 @@ def randomGen():
 def playerTurn():
 	#This function applies to both the human and the ai player. The difference is that during the player's turn, the user can make a move via input.
 	While whoWon() is not true:
+		#Assume the human player goes first.
 		If it is the human player's turn:
 			Have the user roll the 6 dice.
 			If the player can't score, then pass on to the ai player.
-				Now have the user decide which dice to keep for scoring and which dice to re-roll.
-				If the player re-rolls, then always check if the player can score points.
-				Call scorePoints() after the user makes a choice.
+				Have the player put a checkmark next to the dice they want to keep for scoring.
+				If the player chooses to score the points, then call scorePoints() and exit the loop.
+				If the player re-rolls, loop back to the beginning.
+			Call scorePoints() and return the human player's score.
 		If it is the ai player's turn:
 			Have the ai roll the 6 dice.
 			If the player can't score, then pass on to the human player.
+				If the player chooses to score the points, then call scorePoints() and exit the loop.
 				If the ai's total score is far from winning, then the ai will keep re-rolling for the best desired score.
 				If the ai's total score is close to winning, then the ai will more likely keep those dice for scoring.
-				If the player re-rolls, then always check if the player can score points.
-				Call scorePoints() after the ai makes a choice.
+				If the player re-rolls, loop back to the beginning.
+			Call scorePoints() and return the ai player's score..
 
 def scorePoints():
 	#Scoring for the game takes place here, along with special conditions outside of the scoring system.
@@ -61,15 +65,16 @@ def whoWon():
 		Print "Human player won!" and return true.
 	If ((ai player's score is at least 10000) or (ai player rolled all 6 1's)):
 		Print "AI player won." and return true.
+	Return false.
     
-Declare a label called title with the following parameters: (text as "10,000", foreground color as white, background color as black, font as 16-pt Helvetica)
-Declare a label called player with the following parameters: (text as "Select the number of players", foreground color as white, background color as black, font as 16-pt Helvetica)
-Declare a button called user1_btn with the following parameters: (text as "one", height as 3, width as 20, background color as blue, foreground color as white, command opening a new window)
-Declare a button called user2_btn with the following parameters: (text as "two", height as 3, width as 20, background color as blue, foreground color as white, command opening a new window)
-Declare a button called user3_btn with the following parameters: (text as "change me", height as 3, width as 20, background color as blue, foreground color as white, command calling randomGen())
-Declare a label called result with the following parameters: (textvariable as stringme, background color as black, foreground color as white, font as 30-pt Helvetica)
+Create a label called title with the following parameters: (text as "10,000", foreground color as white, background color as black, font as 16-pt Helvetica)
+Create a label called player with the following parameters: (text as "Select the number of players", foreground color as white, background color as black, font as 16-pt Helvetica)
+Create a button called roll_btn with the following parameters: (text as "Roll Dice", height as 3, width as 20, background color as blue, foreground color as white, command calling randomGen())
+Create a label called score with the following parameters: (textvariable as cur_score, background color as black, foreground color as white, font as 30-pt Helvetica)
+Create a label called result with the following parameters: (textvariable as stringme, background color as black, foreground color as white, font as 30-pt Helvetica)
+for i in range(6):
+	Create a checkbox called choices with the following paramters: (text as i+1, variable = IntVar())
 
 Now place all of the following parameters above into the GUI and pack them.
-Set pady for the three buttons to 10.
 
 Run the main loop of the root.
