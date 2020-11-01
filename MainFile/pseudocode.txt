@@ -18,24 +18,27 @@ def randomGen():
 	Set lis into stringme.
     
 def playerTurn():
-	#This function applies to both the human and the ai player. The difference is that during the player's turn, the user can make a move via input.
+	#The difference between the human and ai player is that during the player's turn, the user make a move via input.
 	While whoWon() is not true:
 		#Assume the human player goes first.
 		If it is the human player's turn:
-			Have the user roll the 6 dice.
+			Have the human player roll the dice, excluding the ones kept for scoring.
 			If the player can't score, then pass on to the ai player.
 				Have the player put a checkmark next to the dice they want to keep for scoring.
 				If the player chooses to score the points, then call scorePoints() and exit the loop.
 				If the player re-rolls, loop back to the beginning.
 			Call scorePoints() and return the human player's score.
+			If whoWon() is true for the human player, break out of the while loop.
 		If it is the ai player's turn:
-			Have the ai roll the 6 dice.
+			Have the ai player roll the dice, excluding the ones kept for scoring.
 			If the player can't score, then pass on to the human player.
+				Have the ai randomly select which dice to keep for scoring.
 				If the player chooses to score the points, then call scorePoints() and exit the loop.
-				If the ai's total score is far from winning, then the ai will keep re-rolling for the best desired score.
-				If the ai's total score is close to winning, then the ai will more likely keep those dice for scoring.
+				#If the ai's total score is far from winning, then the ai will keep re-rolling for the best desired score.
+				#If the ai's total score is close to winning, then the ai will more likely keep those dice for scoring.
 				If the player re-rolls, loop back to the beginning.
-			Call scorePoints() and return the ai player's score..
+			Call scorePoints() and return the ai player's score.
+			If whoWon() is true for the ai player, break out of the while loop.
 
 def scorePoints():
 	#Scoring for the game takes place here, along with special conditions outside of the scoring system.
