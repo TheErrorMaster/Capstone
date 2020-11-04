@@ -30,21 +30,50 @@ def randomGen():
     #'\u2684' = dice-five
     #'\u2685' = dice-six
     dice = ['\u2680', '\u2681', '\u2682', '\u2683', '\u2684', '\u2685']
-    for i in range(6):
+    dice_count = [0] * 6
+    for i in range(0, 6):
         # ls.append(random.randrange(1,6)) # list of rand int
         ls.append(random.choice(dice))
-        if (random.choice(dice) == '\u2680'):
-            temp_score += 1000
-        if (random.choice(dice) == '\u2681'):
-            temp_score += 200
-        if (random.choice(dice) == '\u2682'):
-            temp_score += 300
-        if (random.choice(dice) == '\u2683'):
-            temp_score += 400
-        if (random.choice(dice) == '\u2684'):
-            temp_score += 500
-        if (random.choice(dice) == '\u2685'):
-            temp_score += 600
+        if (ls[i] == '\u2680'):
+            dice_count[0] += 1
+        if (ls[i] == '\u2681'):
+            dice_count[1] += 1
+        if (ls[i] == '\u2682'):
+            dice_count[2] += 1
+        if (ls[i] == '\u2683'):
+            dice_count[3] += 1
+        if (ls[i] == '\u2684'):
+            dice_count[4] += 1
+        if (ls[i] == '\u2685'):
+            dice_count[5] += 1
+
+    temp_score += 100 * dice_count[0] #Add 100 for each dice with value 1.
+    temp_score += 50 * dice_count[4] #Add 50 for each dice with value 5.
+    straight_count = 0
+    pair_count = 0
+    #This for loop will count how many pairs or straights are there.
+    for i in range(0,6):
+        if dice_count[i] == 1:
+            straight_count += 1
+        elif dice_count[i] == 2:
+            pair_count += 1
+        elif dice_count[i] > 2:
+            if i == 0:
+                temp_score += 1000 * (dice_count[i]-2) - (100*dice_count[i])
+            elif i == 4:
+                temp_score += 5 * 100 * (dice_count[i]-2) - (50*dice_count[i])
+            else:
+                temp_score += (i+1) * 100 * (dice_count[i]-2)
+
+    if straight_count == 6:
+        temp_score += 350 #Add 350 points if all 6 dice are a straight.
+    if pair_count == 3:
+        temp_score += 500 #Add 500 points if there are 3 pairs of dice.
+        if dice_count[0] > 0:
+            temp_score -= 100 * dice_count[0] #Subtract 100 for each 1.
+        if dice_count[4] > 0:
+            temp_score -= 50 * dice_count[0] #Subtract 50 for each 5.
+    
     lis = " ".join(map(str,ls)) # list to string
     stringme.set(lis)
     new_score = temp_score
@@ -89,7 +118,7 @@ def newWin3():
     user4_btn = Button(win3, text="roll", height=3, width=20, bg="blue", fg="white", command=randomGen).pack(pady=10)
     result_lbls = Label(win3, textvariable=stringme, bg="black", fg="white", font=("Helvetica", 30)).pack()
     user43_btn = Button(win3, text="delete dice", height=3, width=20, bg="blue", fg="white", command= forget).pack(pady=10)
-    score_lbl = Label(win3, textvariable=score, bg="black", fg="white", font=("Helvetica", 30)).pack()
+    score_lbl = Label(win3, textvariable=score, bg="black", fg="white", font=("Helvetica", 16)).pack()
 
 # Varaiables with location
 title_lbl = Label(root, text="10,000", fg="white", bg="black", font=("Helvetica", 16)).pack()
