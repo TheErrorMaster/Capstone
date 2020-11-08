@@ -5,22 +5,59 @@ Declare a new Tkinter variable called root.
 Set title to '10,000 Dice', window size to 400x400, and background color to black.
 Set the screen to align with the center.
 Ensure that the window size stays fixed, so disallow users from resizing the window.
-Declare a variable called stringme and set as StringVar().
-Declare a Boolean variable called selected and set to false.
-Declare a variable called cur_score and set to 0.
+Declare the following varaibles and set as StringVar(): stringme, result, and total.
+
+def on_closing():
+	Display a message box with title "Quit" and text "Do you want to quit?"
+	If user selects OK, then destroy the root window.
+	If user selects Cancel, then destroy only this window.
 
 def randomGen():
 	Declare an empty list called ls.
+	Declare a variable called temp_score and set to 0.
+	Declare a variable called dice_count and multiply [0] by 6.
 	Declare a list called dice containing the six unicode names for the die value.
-	While variable i is less than 6:
-		If one of the dice has been selected for scoring, ignore and continue.
+	For i in range(0, 6):
+		If (ls[i] is dice one):
+			Increment dice_count[0].
+		If (ls[i] is dice two):
+			Increment dice_count[1].
+		If (ls[i] is dice three):
+			Increment dice_count[2].
+		If (ls[i] is dice four):
+			Increment dice_count[3].
+		If (ls[i] is dice five):
+			Increment dice_count[4].
+		If (ls[i] is dice six):
+			Increment dice_count[5].
+
+	Add 100 to temp_score for each ones.
+	Add 50 to temp_score for each fives.
+	Declare two variables called straight_count and pair_count, and set to 0.
+	For i in range(0, 6):
+		If dice_count[i] is 1:
+			Increment straight_count.
+		Else if dice_count[i] is 2:
+			Increment pair_count.
+		Else if dice_count[i] is greater than 2:
+			If i is 0:
+				Add 1000*(dice_count[i]-2)-(100*dice_count[i]) to temp_score.
+			Else if i is 4:
+				Add 5*100*(dice_count[i]-2)-(50*dice_count[i]) to temp_score.
+			Else:
+				Add (i+1)*100*(dice_count[i]-2) to temp_score.
+
 	Randomly pick of the dice from the list and append it into ls.
-	Declare a ariable called lis and join ls into it as string.
+	Declare a variable called lis and join ls into it as string.
 	Set lis into stringme.
+	If temp_score is 0:
+		Set result to "Sorry! No points earned."
+	Declare a variable called new_score and set temp_score to it.
+	Set result to "You scored %s points.", where %s is new_score.
 
 #This function resets the dice roll result.
 def forget():
-	Set stringme to "".
+	Set stringme and result to "".
 
 def newWindow1():
 	Declare a TopLevel of root called window1.
@@ -30,6 +67,7 @@ def newWindow1():
 	Create a button called roll1_btn with the following parameters: (text as "Roll Dice", height as 3, width as 20, background color as blue, foreground color as white, command calling randomGen())
 	Create a label called result with the following parameters: (textvariable as stringme, background color as black, foreground color as white, font as 30-pt Helvetica)
 	Create a button called delete_btn with the following parameters: (text as "Roll Dice", height as 3, width as 20, background color as blue, foreground color as white, command calling forget())
+	Create a label called canScore with the following parameters: textvariable as result, background color as black, foreground color as white, font as 16-pt Helvetica)
 
 def newWindow2():
 	Declare a TopLevel of root called window2.
@@ -39,6 +77,7 @@ def newWindow2():
 	Create a button called roll1_btn with the following parameters: (text as "Roll Dice", height as 3, width as 20, background color as blue, foreground color as white, command calling randomGen())
 	Create a label called result with the following parameters: (textvariable as stringme, background color as black, foreground color as white, font as 30-pt Helvetica)
 	Create a button called delete_btn with the following parameters: (text as "Roll Dice", height as 3, width as 20, background color as blue, foreground color as white, command calling forget())
+	Create a label called canScore with the following parameters: textvariable as result, background color as black, foreground color as white, font as 16-pt Helvetica)
 
 def newWindow3():
 	Declare a TopLevel of root called window3.
@@ -48,68 +87,14 @@ def newWindow3():
 	Create a button called roll1_btn with the following parameters: (text as "Roll Dice", height as 3, width as 20, background color as blue, foreground color as white, command calling randomGen())
 	Create a label called result with the following parameters: (textvariable as stringme, background color as black, foreground color as white, font as 30-pt Helvetica)
 	Create a button called delete_btn with the following parameters: (text as "Roll Dice", height as 3, width as 20, background color as blue, foreground color as white, command calling forget())
-    
-def playerTurn():
-	#The difference between the human and ai player is that during the player's turn, the user make a move via input.
-	While whoWon() is not true:
-		#Assume the human player goes first.
-		If it is the human player's turn:
-			Have the human player roll the dice, excluding the ones kept for scoring.
-			If the player can't score, then pass on to the ai player.
-				Have the player put a checkmark next to the dice they want to keep for scoring.
-				If the player chooses to score the points, then call scorePoints() and exit the loop.
-				If the player re-rolls, loop back to the beginning.
-			Call scorePoints() and return the human player's score.
-			If whoWon() is true for the human player, break out of the while loop.
-		If it is the ai player's turn:
-			Have the ai player roll the dice, excluding the ones kept for scoring.
-			If the player can't score, then pass on to the human player.
-				Have the ai randomly select which dice to keep for scoring.
-				If the player chooses to score the points, then call scorePoints() and exit the loop.
-				#If the ai's total score is far from winning, then the ai will keep re-rolling for the best desired score.
-				#If the ai's total score is close to winning, then the ai will more likely keep those dice for scoring.
-				If the player re-rolls, loop back to the beginning.
-			Call scorePoints() and return the ai player's score.
-			If whoWon() is true for the ai player, break out of the while loop.
-
-def scorePoints():
-	#Scoring for the game takes place here, along with special conditions outside of the scoring system.
-	If the dice roll results in all 6 1's, then set whoWon() to true and exit out of the function.
-
-	Declare the following list of points for the die value below:
-	die_one = 1000
-	die_two = 200
-	die_three = 300
-	die_four = 400
-	die_five = 500
-	die_six = 600
-
-	For each 1's in the die roll, add 100 points to the total score.
-	For each 5's in the die roll, add 50 points to the total score.
-	Multiply the numbering of scoring dice by 100 if a 3-of-a-kind exists and add to total score.
-	Multiply the total score by 2 if a 3-of-a-kind exists.
-	Multiply the total score by 3 if a 4-of-a-kind exists.
-	Multiply the total score by 4 if a 5-of-a-kind exists.
-
-	Return the total score to the player.
-
-def whoWon():
-	#To check if the player wins, either verify if a player's score is 10000 or the player has rolled all 6 ones during their turn.
-	#If any of the two conditions are true, then that player wins the game.
-	If ((human player's score is at least 10000) or (human player rolled all 6 1's)):
-		Print "Human player won!" and return true.
-	If ((ai player's score is at least 10000) or (ai player rolled all 6 1's)):
-		Print "AI player won." and return true.
-	Return false.
+	Create a label called canScore with the following parameters: textvariable as result, background color as black, foreground color as white, font as 16-pt Helvetica)
     
 Create a label called title with the following parameters: (text as "10,000", foreground color as white, background color as black, font as 16-pt Helvetica)
 Create a label called player with the following parameters: (text as "Select the number of players", foreground color as white, background color as black, font as 16-pt Helvetica)
 Create a button called play1_btn with the following parameters: (text as "One player", height as 3, width as 20, background color as blue, foreground color as white, command calling newWindow1())
 Create a button called play2_btn with the following parameters: (text as "Two player", height as 3, width as 20, background color as blue, foreground color as white, command calling newWindow2())
 Create a button called play3_btn with the following parameters: (text as "Three player", height as 3, width as 20, background color as blue, foreground color as white, command calling newWindow3())
-Create a button called roll_btn with the following parameters: (text as "Roll Dice", height as 3, width as 20, background color as blue, foreground color as white, command calling randomGen())
-Create a label called score with the following parameters: (textvariable as cur_score, background color as black, foreground color as white, font as 30-pt Helvetica)
-Create a label called result with the following parameters: (textvariable as stringme, background color as black, foreground color as white, font as 30-pt Helvetica)
+Create a button called quit_btn with the following parameters: (text as "Quit", height as 3, width as 20, background color as blue, foreground color as white, command calling on_closing())
 
 Now place all of the following parameters above into the GUI and pack them.
 
