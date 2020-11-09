@@ -10,6 +10,7 @@ root.geometry("400x400")
 root.config(bg="green")
 root.resizable(False, False) #Disallow players from resizing the window.
 stringme=StringVar()
+winner=StringVar() #This is called only if a player has scored 10000 points.
 points=IntVar()
 total=IntVar()
 
@@ -87,10 +88,17 @@ def randomGen():
         new_total = total.get() + points.get()
         total.set(new_total)
 
+    # Is the total number of points at least 10000?
+    # If yes, then display the winning message and disable buttons.
+    if (total.get() >= 10000):
+        winner.set("You won!")
+        
+
 # reset the dice 
 def forget():
     #new_total = 0
     stringme.set("")
+    winner.set("")
     points.set(0)
     total.set(0)
 
@@ -103,10 +111,11 @@ def newWin1():
     win1.config(bg="green")
     win1.resizable(False, False)
     user4_btn = Button(win1, text="roll", height=3, width=20, bg="blue", fg="white", command=randomGen).pack(pady=10)
-    result_lbls = Label(win1, textvariable=stringme, bg="black", fg="white", font=("Helvetica", 30)).pack()
+    result_lbls = Label(win1, textvariable=stringme, bg="green", fg="white", font=("Helvetica", 30)).pack()
     user41_btn = Button(win1, text="delete dice", height=3, width=20, bg="blue", fg="white", command= forget).pack(pady=10)
-    score_lbl = Label(win1, textvariable=points, bg="black", fg="white", font=("Helvetica", 16)).pack()
-    total_lbl = Label(win1, textvariable=total, bg="black", fg="white", font=("Helvetica", 16)).pack()
+    score_lbl = Label(win1, textvariable=points, bg="green", fg="white", font=("Helvetica", 16)).pack()
+    total_lbl = Label(win1, textvariable=total, bg="green", fg="white", font=("Helvetica", 16)).pack()
+    win_lbl = Label(win1, textvariable=winner, bg="green", fg="white", font=("Helvetica", 16)).pack()
 
 def newWin2():
     forget()
@@ -117,10 +126,11 @@ def newWin2():
     win2.config(bg="green")
     win2.resizable(False, False)
     user4_btn = Button(win2, text="roll", height=3, width=20, bg="blue", fg="white", command=randomGen).pack(pady=10)
-    result_lbls = Label(win2, textvariable=stringme, bg="black", fg="white", font=("Helvetica", 30)).pack()
+    result_lbls = Label(win2, textvariable=stringme, bg="green", fg="white", font=("Helvetica", 30)).pack()
     user42_btn = Button(win2, text="delete dice", height=3, width=20, bg="blue", fg="white", command= forget).pack(pady=10)
-    score_lbl = Label(win2, textvariable=points, bg="black", fg="white", font=("Helvetica", 16)).pack()
-    total_lbl = Label(win2, textvariable=total, bg="black", fg="white", font=("Helvetica", 16)).pack()
+    score_lbl = Label(win2, textvariable=points, bg="green", fg="white", font=("Helvetica", 16)).pack()
+    total_lbl = Label(win2, textvariable=total, bg="green", fg="white", font=("Helvetica", 16)).pack()
+    win_lbl = Label(win2, textvariable=winner, bg="green", fg="white", font=("Helvetica", 16)).pack()
 
 def newWin3():
     win3 = Toplevel(root)
@@ -131,14 +141,15 @@ def newWin3():
     win3.config(bg="green")
     win3.resizable(False, False)
     user4_btn = Button(win3, text="roll", height=3, width=20, bg="blue", fg="white", command=randomGen).pack(pady=10)
-    result_lbls = Label(win3, textvariable=stringme, bg="black", fg="white", font=("Helvetica", 30)).pack()
+    result_lbls = Label(win3, textvariable=stringme, bg="green", fg="white", font=("Helvetica", 30)).pack()
     user43_btn = Button(win3, text="delete dice", height=3, width=20, bg="blue", fg="white", command= forget).pack(pady=10)
-    score_lbl = Label(win3, textvariable=points, bg="black", fg="white", font=("Helvetica", 16)).pack()
-    total_lbl = Label(win3, textvariable=total, bg="black", fg="white", font=("Helvetica", 16)).pack()
+    score_lbl = Label(win3, textvariable=points, bg="green", fg="white", font=("Helvetica", 16)).pack()
+    total_lbl = Label(win3, textvariable=total, bg="green", fg="white", font=("Helvetica", 16)).pack()
+    win_lbl = Label(win3, textvariable=winner, bg="green", fg="white", font=("Helvetica", 16)).pack()
 
 # Varaiables with location
-title_lbl = Label(root, text="10,000", fg="white", bg="black", font=("Helvetica", 16)).pack()
-player_lbl = Label(root, text="Select the Number of Players", fg="white", bg="black", font=("Helvetica", 16)).pack()
+title_lbl = Label(root, text="10,000 Dice", fg="white", bg="green", font=("Helvetica", 16)).pack()
+player_lbl = Label(root, text="Select the Number of Players", fg="white", bg="green", font=("Helvetica", 16)).pack()
 user1_btn = Button(root, text="one", height=3, width=20, bg="blue", fg="white", command=newWin1).pack(pady=10)
 user2_btn = Button(root, text="two", height=3, width=20, bg="blue", fg="white", command=newWin2).pack(pady=10)
 user3_btn = Button(root, text="three", height=3, width=20, bg="blue", fg="white", command=newWin3).pack(pady=10)
