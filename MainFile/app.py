@@ -10,8 +10,8 @@ root.geometry("400x400")
 root.config(bg="green")
 root.resizable(False, False) #Disallow players from resizing the window.
 stringme=StringVar()
-result=StringVar()
-total=StringVar()
+points=IntVar()
+total=IntVar()
 
 # MessageBox on Close
 #This triggers only if the player exits the game.
@@ -22,8 +22,8 @@ root.protocol("WM_DELETE_WINDOW", on_closing) # message box
 
 def randomGen():
     ls = []
-    #global new_total
     temp_score = 0
+    new_total = total.get()
     #See below for the dice unicode:
     #'\u2680' = dice-one
     #'\u2681' = dice-two
@@ -78,20 +78,21 @@ def randomGen():
     
     lis = " ".join(map(str,ls)) # list to string
     stringme.set(lis)
-    if (temp_score == 0):
-        result.set("Sorry! No points earned.")
+    new_score = temp_score
+    points.set(new_score)
+    #Display this message box below only if the player can't score.
+    if points.get() == 0:
+        messagebox.showinfo("info", "No Points left, End of turn")
     else:
-        new_score = temp_score
-        #new_total += new_score
-        result.set("You scored %s points." % new_score)
-        #total.set("Your total score is %s points." % new_total)
+        new_total = total.get() + points.get()
+        total.set(new_total)
 
 # reset the dice 
 def forget():
     #new_total = 0
     stringme.set("")
-    result.set("")
-    #total.set("Your total score is %s points." % new_total)
+    points.set(0)
+    total.set(0)
 
 def newWin1():
     win1 = Toplevel(root)
@@ -104,8 +105,8 @@ def newWin1():
     user4_btn = Button(win1, text="roll", height=3, width=20, bg="blue", fg="white", command=randomGen).pack(pady=10)
     result_lbls = Label(win1, textvariable=stringme, bg="black", fg="white", font=("Helvetica", 30)).pack()
     user41_btn = Button(win1, text="delete dice", height=3, width=20, bg="blue", fg="white", command= forget).pack(pady=10)
-    canScore_lbl = Label(win1, textvariable=result, bg="black", fg="white", font=("Helvetica", 16)).pack()
-    #total_lbl = Label(win1, textvariable=total, bg="black", fg="white", font=("Helvetica", 16)).pack()
+    score_lbl = Label(win1, textvariable=points, bg="black", fg="white", font=("Helvetica", 16)).pack()
+    total_lbl = Label(win1, textvariable=total, bg="black", fg="white", font=("Helvetica", 16)).pack()
 
 def newWin2():
     forget()
@@ -118,8 +119,8 @@ def newWin2():
     user4_btn = Button(win2, text="roll", height=3, width=20, bg="blue", fg="white", command=randomGen).pack(pady=10)
     result_lbls = Label(win2, textvariable=stringme, bg="black", fg="white", font=("Helvetica", 30)).pack()
     user42_btn = Button(win2, text="delete dice", height=3, width=20, bg="blue", fg="white", command= forget).pack(pady=10)
-    canScore_lbl = Label(win2, textvariable=result, bg="black", fg="white", font=("Helvetica", 16)).pack()
-    #total_lbl = Label(win2, textvariable=total, bg="black", fg="white", font=("Helvetica", 16)).pack()
+    score_lbl = Label(win2, textvariable=points, bg="black", fg="white", font=("Helvetica", 16)).pack()
+    total_lbl = Label(win2, textvariable=total, bg="black", fg="white", font=("Helvetica", 16)).pack()
 
 def newWin3():
     win3 = Toplevel(root)
@@ -132,8 +133,8 @@ def newWin3():
     user4_btn = Button(win3, text="roll", height=3, width=20, bg="blue", fg="white", command=randomGen).pack(pady=10)
     result_lbls = Label(win3, textvariable=stringme, bg="black", fg="white", font=("Helvetica", 30)).pack()
     user43_btn = Button(win3, text="delete dice", height=3, width=20, bg="blue", fg="white", command= forget).pack(pady=10)
-    canScore_lbl = Label(win3, textvariable=result, bg="black", fg="white", font=("Helvetica", 16)).pack()
-    #total_lbl = Label(win3, textvariable=total, bg="black", fg="white", font=("Helvetica", 16)).pack()
+    score_lbl = Label(win3, textvariable=points, bg="black", fg="white", font=("Helvetica", 16)).pack()
+    total_lbl = Label(win3, textvariable=total, bg="black", fg="white", font=("Helvetica", 16)).pack()
 
 # Varaiables with location
 title_lbl = Label(root, text="10,000", fg="white", bg="black", font=("Helvetica", 16)).pack()
