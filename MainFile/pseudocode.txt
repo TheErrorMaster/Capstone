@@ -3,10 +3,10 @@ from tkinter import messagebox #This is needed for message boxes (like exiting t
 import random
 
 Declare a new Tkinter variable called root.
-Set title to '10,000 Dice', window size to 400x400, and background color to black.
+Set title to '10,000 Dice', window size to 400x400, and background color to green.
 Set the screen to align with the center.
-Ensure that the window size stays fixed, so disallow users from resizing the window.
-Declare a variable called stringme and set as StringVar().
+Disable the resizing of the window.
+Declare two variables called stringme and winner, and and set both as StringVar().
 Declare two variables called points and total, and set both as IntVar().
 
 def on_closing():
@@ -63,10 +63,11 @@ def randomGen():
 	Else:
 		Declare a variable called new_total and add total.get() to points.get().
 		Set new_total to total.
+	If total.get() is at least 10000, set winner to "You won!".
 
 #This function resets the dice roll result.
 def forget():
-	Set stringme to "".
+	Set stringme and winner to "".
 	Set points and total to 0.
 
 def newWindow1():
@@ -76,10 +77,11 @@ def newWindow1():
 	Set title to "One player", window size to 400x400, and background color to green.
 	Disable resize for this window.
 	Create a button called roll1_btn with the following parameters: (text as "Roll Dice", height as 3, width as 20, background color as blue, foreground color as white, command calling randomGen())
-	Create a label called result with the following parameters: (textvariable as stringme, background color as black, foreground color as white, font as 30-pt Helvetica)
+	Create a label called result with the following parameters: (textvariable as stringme, background color as green, foreground color as white, font as 30-pt Helvetica)
 	Create a button called delete_btn with the following parameters: (text as "Delete", height as 3, width as 20, background color as blue, foreground color as white, command calling forget())
-	Create a label called points with the following parameters: textvariable as points, background color as black, foreground color as white, font as 16-pt Helvetica)
-	Create a label called total with the following parameters: textvariable as total, background color as black, foreground color as white, font as 16-pt Helvetica)
+	Create a label called points with the following parameters: textvariable as points, background color as green, foreground color as white, font as 16-pt Helvetica)
+	Create a label called total with the following parameters: textvariable as total, background color as green, foreground color as white, font as 16-pt Helvetica)
+	Create a label called win with the following parameters: textvariable as winner, background color as green, foreground color as white, font as 16-pt Helvetica)
 
 def newWindow2():
 	Declare a TopLevel window of root called window2.
@@ -88,10 +90,11 @@ def newWindow2():
 	Set title to "Two player", window size to 400x400, and background color to green.
 	Disable resize for this window.
 	Create a button called roll1_btn with the following parameters: (text as "Roll Dice", height as 3, width as 20, background color as blue, foreground color as white, command calling randomGen())
-	Create a label called result with the following parameters: (textvariable as stringme, background color as black, foreground color as white, font as 30-pt Helvetica)
+	Create a label called result with the following parameters: (textvariable as stringme, background color as green, foreground color as white, font as 30-pt Helvetica)
 	Create a button called delete_btn with the following parameters: (text as "Delete", height as 3, width as 20, background color as blue, foreground color as white, command calling forget())
-	Create a label called points with the following parameters: textvariable as points, background color as black, foreground color as white, font as 16-pt Helvetica)
-	Create a label called total with the following parameters: textvariable as total, background color as black, foreground color as white, font as 16-pt Helvetica)
+	Create a label called points with the following parameters: textvariable as points, background color as green, foreground color as white, font as 16-pt Helvetica)
+	Create a label called total with the following parameters: textvariable as total, background color as green, foreground color as white, font as 16-pt Helvetica)
+	Create a label called win with the following parameters: textvariable as winner, background color as green, foreground color as white, font as 16-pt Helvetica)
 
 def newWindow3():
 	Declare a TopLevel window of root called window3.
@@ -100,13 +103,14 @@ def newWindow3():
 	Set title to "Three player", window size to 400x400, and background color to green.
 	Disable resize for this window.
 	Create a button called roll1_btn with the following parameters: (text as "Roll Dice", height as 3, width as 20, background color as blue, foreground color as white, command calling randomGen())
-	Create a label called result with the following parameters: (textvariable as stringme, background color as black, foreground color as white, font as 30-pt Helvetica)
+	Create a label called result with the following parameters: (textvariable as stringme, background color as green, foreground color as white, font as 30-pt Helvetica)
 	Create a button called delete_btn with the following parameters: (text as "Delete", height as 3, width as 20, background color as blue, foreground color as white, command calling forget())
-	Create a label called points with the following parameters: textvariable as points, background color as black, foreground color as white, font as 16-pt Helvetica)
-	Create a label called total with the following parameters: textvariable as total, background color as black, foreground color as white, font as 16-pt Helvetica)
+	Create a label called points with the following parameters: textvariable as points, background color as green, foreground color as white, font as 16-pt Helvetica)
+	Create a label called total with the following parameters: textvariable as total, background color as green, foreground color as white, font as 16-pt Helvetica)
+	Create a label called win with the following parameters: textvariable as winner, background color as green, foreground color as white, font as 16-pt Helvetica)
     
-Create a label called title with the following parameters: (text as "10,000", foreground color as white, background color as black, font as 16-pt Helvetica)
-Create a label called player with the following parameters: (text as "Select the number of players", foreground color as white, background color as black, font as 16-pt Helvetica)
+Create a label called title with the following parameters: (text as "10,000", foreground color as white, background color as green, font as 16-pt Helvetica)
+Create a label called player with the following parameters: (text as "Select the number of players", foreground color as white, background color as green, font as 16-pt Helvetica)
 #One player will create an AI player. Two, three, and four players have each user take turns.
 Create a button called play1_btn with the following parameters: (text as "One player", height as 3, width as 20, background color as blue, foreground color as white, command calling newWindow1())
 Create a button called play2_btn with the following parameters: (text as "Two player", height as 3, width as 20, background color as blue, foreground color as white, command calling newWindow2())
