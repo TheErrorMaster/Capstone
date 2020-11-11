@@ -10,8 +10,23 @@ root.geometry("400x400")
 root.config(bg="green")
 root.resizable(False, False) #Disallow players from resizing the window.
 stringme=StringVar()
-points=IntVar()
-total=IntVar()
+points=IntVar() # the current amount of points
+total=IntVar() #the total amount of points
+
+#See below for the dice unicode:
+#'\u2680' = dice-one
+#'\u2681' = dice-two
+#'\u2682' = dice-three
+#'\u2683' = dice-four
+#'\u2684' = dice-five
+#'\u2685' = dice-six
+dice = ['\u2680', '\u2681', '\u2682', '\u2683', '\u2684', '\u2685']
+
+dice_rolled=[]
+dice_kept=[]
+for i in range(0, 6):
+    dice_rolled.append(StringVar())
+    dice_kept.append(StringVar())
 
 # MessageBox on Close
 #This triggers only if the player exits the game.
@@ -21,32 +36,33 @@ def on_closing():
 root.protocol("WM_DELETE_WINDOW", on_closing) # message box
 
 def randomGen():
-    ls = []
+    forget()
+    for i in range(0, 6):
+        dice_rolled[i].set(random.choice(dice))
+
+def keep_dice(args):
+    if dice_kept[args].get() == '':
+        dice_kept[args].set(dice_rolled[args].get())
+    else:
+        dice_kept[args].set('')
+    calc_points()
+        
+def calc_points():
     temp_score = 0
     new_total = total.get()
-    #See below for the dice unicode:
-    #'\u2680' = dice-one
-    #'\u2681' = dice-two
-    #'\u2682' = dice-three
-    #'\u2683' = dice-four
-    #'\u2684' = dice-five
-    #'\u2685' = dice-six
-    dice = ['\u2680', '\u2681', '\u2682', '\u2683', '\u2684', '\u2685']
     dice_count = [0] * 6
     for i in range(0, 6):
-        # ls.append(random.randrange(1,6)) # list of rand int
-        ls.append(random.choice(dice))
-        if (ls[i] == '\u2680'):
+        if (dice_kept[i].get() == dice[0]):
             dice_count[0] += 1
-        if (ls[i] == '\u2681'):
+        if (dice_kept[i].get() == dice[1]):
             dice_count[1] += 1
-        if (ls[i] == '\u2682'):
+        if (dice_kept[i].get() == dice[2]):
             dice_count[2] += 1
-        if (ls[i] == '\u2683'):
+        if (dice_kept[i].get() == dice[3]):
             dice_count[3] += 1
-        if (ls[i] == '\u2684'):
+        if (dice_kept[i].get() == dice[4]):
             dice_count[4] += 1
-        if (ls[i] == '\u2685'):
+        if (dice_kept[i].get() == dice[5]):
             dice_count[5] += 1
 
     temp_score += 100 * dice_count[0] #Add 100 for each dice with value 1.
@@ -76,28 +92,36 @@ def randomGen():
         if dice_count[4] > 0:
             temp_score -= 50 * dice_count[0] #Subtract 50 for each 5.
     
-    lis = " ".join(map(str,ls)) # list to string
-    stringme.set(lis)
     new_score = temp_score
     points.set(new_score)
-    #Display this message box below only if the player can't score.
-    if points.get() == 0:
-        messagebox.showinfo("info", "No Points left, End of turn")
-    else:
-        new_total = total.get() + points.get()
-        total.set(new_total)
+##    #Display this message box below only if the player can't score.
+##    if points.get() == 0:
+##        messagebox.showinfo("info", "No Points left, End of turn")
+##    else:
+##        new_total = total.get() + points.get()
+##        total.set(new_total)
+    new_total = total.get() + points.get()
+    total.set(new_total)
 
     # Is the total number of points greater than or equal to 10000?
     # If yes, then display the winning message.
     if (total.get() >= 10000):
         messagebox.showinfo("info", "You won!")
         
-
-# reset the dice 
-def forget():
-    stringme.set("")
+#Reset sets all values to default, including the total amount of points.
+def reset():
+    for i in range(0, 6):
+        dice_rolled[i].set("")
+        dice_kept[i].set("")
     points.set(0)
     total.set(0)
+
+#Forget is like reset, except it only keeps the total amount of points.
+def forget():
+    for i in range(0, 6):
+        dice_rolled[i].set("")
+        dice_kept[i].set("")
+    points.set(0)
 
 def newWin1():
     win1 = Toplevel(root)
@@ -108,8 +132,12 @@ def newWin1():
     win1.config(bg="green")
     win1.resizable(False, False)
     roll_btn = Button(win1, text="roll", height=3, width=20, bg="blue", fg="white", command=randomGen).pack(pady=10)
+    frame = Frame(win1)
+    frame.pack()
+    for i in range(0, 6):
+        ans = Button(frame, textvariable=dice_rolled[i], height=1, width=2, font=("Helvetica", 20), command=lambda i=i : keep_dice(i)).pack(side=LEFT)
     result_lbls = Label(win1, textvariable=stringme, bg="green", fg="white", font=("Helvetica", 30)).pack()
-    reset_btn = Button(win1, text="reset", height=3, width=20, bg="blue", fg="white", command= forget).pack(pady=10)
+    reset_btn = Button(win1, text="reset", height=3, width=20, bg="blue", fg="white", command=reset).pack(pady=10)
     score_lbl = Label(win1, textvariable=points, bg="green", fg="white", font=("Helvetica", 16)).pack()
     total_lbl = Label(win1, textvariable=total, bg="green", fg="white", font=("Helvetica", 16)).pack()
 
@@ -122,8 +150,12 @@ def newWin2():
     win2.config(bg="green")
     win2.resizable(False, False)
     roll_btn = Button(win2, text="roll", height=3, width=20, bg="blue", fg="white", command=randomGen).pack(pady=10)
+    frame = Frame(win1)
+    frame.pack()
+    for i in range(0, 6):
+        ans = Button(frame, textvariable=dice_rolled[i], height=1, width=2, font=("Helvetica", 20), command=lambda i=i : keep_dice(i)).pack(side=LEFT)
     result_lbls = Label(win2, textvariable=stringme, bg="green", fg="white", font=("Helvetica", 30)).pack()
-    reset_btn = Button(win2, text="reset", height=3, width=20, bg="blue", fg="white", command= forget).pack(pady=10)
+    reset_btn = Button(win2, text="reset", height=3, width=20, bg="blue", fg="white", command=reset).pack(pady=10)
     score_lbl = Label(win2, textvariable=points, bg="green", fg="white", font=("Helvetica", 16)).pack()
     total_lbl = Label(win2, textvariable=total, bg="green", fg="white", font=("Helvetica", 16)).pack()
 
@@ -136,8 +168,12 @@ def newWin3():
     win3.config(bg="green")
     win3.resizable(False, False)
     roll_btn = Button(win3, text="roll", height=3, width=20, bg="blue", fg="white", command=randomGen).pack(pady=10)
+    frame = Frame(win1)
+    frame.pack()
+    for i in range(0, 6):
+        ans = Button(frame, textvariable=dice_rolled[i], height=1, width=2, font=("Helvetica", 20), command=lambda i=i : keep_dice(i)).pack(side=LEFT)
     result_lbls = Label(win3, textvariable=stringme, bg="green", fg="white", font=("Helvetica", 30)).pack()
-    reset_btn = Button(win3, text="reset", height=3, width=20, bg="blue", fg="white", command= forget).pack(pady=10)
+    reset_btn = Button(win3, text="reset", height=3, width=20, bg="blue", fg="white", command=reset).pack(pady=10)
     score_lbl = Label(win3, textvariable=points, bg="green", fg="white", font=("Helvetica", 16)).pack()
     total_lbl = Label(win3, textvariable=total, bg="green", fg="white", font=("Helvetica", 16)).pack()
 
