@@ -10,6 +10,8 @@ root.geometry("400x400")
 root.config(bg="green")
 root.resizable(False, False) #Disallow players from resizing the window.
 stringme=StringVar()
+dice_btns = []
+curr_pts = 0
 points=IntVar() # the current amount of points
 total=IntVar() #the total amount of points
 
@@ -24,9 +26,12 @@ dice = ['\u2680', '\u2681', '\u2682', '\u2683', '\u2684', '\u2685']
 
 dice_rolled=[]
 dice_kept=[]
+curr_dice=[]
+
 for i in range(0, 6):
     dice_rolled.append(StringVar())
     dice_kept.append(StringVar())
+    curr_dice.append(StringVar())
 
 # MessageBox on Close
 #This triggers only if the player exits the game.
@@ -41,28 +46,44 @@ def randomGen():
         dice_rolled[i].set(random.choice(dice))
 
 def keep_dice(args):
-    if dice_kept[args].get() == '':
-        dice_kept[args].set(dice_rolled[args].get())
-    else:
-        dice_kept[args].set('')
-    calc_points()
+    current_score = calc_points()
+    button = dice_btns[args]
+    #add dice to score if unadded
+    if dice_kept[args].get() == '' and curr_dice[args].get() == '':
+        curr_dice[args].set(dice_rolled[args].get())
+        #only add dice if points are available
+        if current_score == calc_points():
+            curr_dice[args].set('')
+        else:
+            button.config(relief=SUNKEN)
+    #take dice from score if already added
+    elif dice_kept == '':
+        curr_dice[args].set('')
+        button.config(relief=RAISED)
+    curr_pts = calc_points()
+    points.set(points.get()-current_score+curr_pts)
+
+    for i in range(0, 6):
+        if dice_kept[i].get() == '':
+            return
+    #reset dice and continue to roll
+
         
 def calc_points():
     temp_score = 0
-    new_total = total.get()
     dice_count = [0] * 6
     for i in range(0, 6):
-        if (dice_kept[i].get() == dice[0]):
+        if (curr_dice[i].get() == dice[0]):
             dice_count[0] += 1
-        if (dice_kept[i].get() == dice[1]):
+        if (curr_dice[i].get() == dice[1]):
             dice_count[1] += 1
-        if (dice_kept[i].get() == dice[2]):
+        if (curr_dice[i].get() == dice[2]):
             dice_count[2] += 1
-        if (dice_kept[i].get() == dice[3]):
+        if (curr_dice[i].get() == dice[3]):
             dice_count[3] += 1
-        if (dice_kept[i].get() == dice[4]):
+        if (curr_dice[i].get() == dice[4]):
             dice_count[4] += 1
-        if (dice_kept[i].get() == dice[5]):
+        if (curr_dice[i].get() == dice[5]):
             dice_count[5] += 1
 
     temp_score += 100 * dice_count[0] #Add 100 for each dice with value 1.
@@ -91,15 +112,22 @@ def calc_points():
             temp_score -= 100 * dice_count[0] #Subtract 100 for each 1.
         if dice_count[4] > 0:
             temp_score -= 50 * dice_count[0] #Subtract 50 for each 5.
-    
-    new_score = temp_score
-    points.set(new_score)
+    return temp_score
 ##    #Display this message box below only if the player can't score.
 ##    if points.get() == 0:
 ##        messagebox.showinfo("info", "No Points left, End of turn")
 ##    else:
 ##        new_total = total.get() + points.get()
 ##        total.set(new_total)
+
+def reroll():
+    for i in range(0, 6):
+        if  curr_dice[i].get() != '':
+            dice_kept[i].set(curr_dice[i].get())
+        if dice_kept[i].get() == '':
+            dice_rolled[i].set(random.choice(dice))
+
+def endTurn():
     new_total = total.get() + points.get()
     total.set(new_total)
 
@@ -107,12 +135,16 @@ def calc_points():
     # If yes, then display the winning message.
     if (total.get() >= 10000):
         messagebox.showinfo("info", "You won!")
+    forget()
+
         
 #Reset sets all values to default, including the total amount of points.
 def reset():
     for i in range(0, 6):
         dice_rolled[i].set("")
         dice_kept[i].set("")
+        curr_dice[i].set("")
+        dice_btns[i].config(relief=RAISED)
     points.set(0)
     total.set(0)
 
@@ -121,6 +153,9 @@ def forget():
     for i in range(0, 6):
         dice_rolled[i].set("")
         dice_kept[i].set("")
+        curr_dice[i].set("")
+        if len(dice_btns) != 0:
+            dice_btns[i].config(relief=RAISED)
     points.set(0)
 
 def newWin1():
@@ -132,14 +167,30 @@ def newWin1():
     win1.config(bg="green")
     win1.resizable(False, False)
     roll_btn = Button(win1, text="roll", height=3, width=20, bg="blue", fg="white", command=randomGen).pack(pady=10)
+
+    #DICE
     frame = Frame(win1)
     frame.pack()
     for i in range(0, 6):
-        ans = Button(frame, textvariable=dice_rolled[i], height=1, width=2, font=("Helvetica", 20), command=lambda i=i : keep_dice(i)).pack(side=LEFT)
+        ans = Button(frame, textvariable=dice_rolled[i], height=1, width=2, font=("Helvetica", 20), command=lambda i=i : keep_dice(i))
+        ans.pack(side=LEFT)
+        dice_btns.append(ans)
     result_lbls = Label(win1, textvariable=stringme, bg="green", fg="white", font=("Helvetica", 30)).pack()
-    reset_btn = Button(win1, text="reset", height=3, width=20, bg="blue", fg="white", command=reset).pack(pady=10)
+
+    #TURN OPTIONS
+    frame2 = Frame(win1, bg = "green")
+    frame2.pack()
+    rollon_btn = Button(frame2, text="Keep points and \nRoll the remaining dice", height=3, width=20, bg="blue", fg="white", command=reroll)
+    rollon_btn.pack(side=LEFT)
+    rollon_btn.pack(padx=10)
+    endturn_btn = Button(frame2, text="End Turn and \nAdd Points to Score", height=3, width=20, bg="blue", fg="white", command=endTurn)
+    endturn_btn.pack(padx=10)
+    endturn_btn.pack(side=LEFT)
+
+    #SCOREBOARD
     score_lbl = Label(win1, textvariable=points, bg="green", fg="white", font=("Helvetica", 16)).pack()
     total_lbl = Label(win1, textvariable=total, bg="green", fg="white", font=("Helvetica", 16)).pack()
+    reset_btn = Button(win1, text="reset", height=3, width=20, bg="blue", fg="white", command=reset).pack(pady=10)
 
 def newWin2():
     forget()
