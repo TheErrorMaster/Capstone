@@ -6,7 +6,7 @@ import random
 root = Tk()
 root.title('tk::PlaceWindow . center')
 root.title('10,000 Dice')
-root.geometry("400x500")
+root.geometry("400x600")
 root.config(bg="green")
 root.resizable(False, False) #Disallow players from resizing the window.
 stringme=StringVar()
@@ -14,6 +14,8 @@ dice_btns = []
 curr_pts = 0
 points=IntVar() # the current amount of points
 total=IntVar() #the total amount of points
+pointsAI=IntVar() # current amount of points for AI
+totalAI=IntVar() # total amount of points for AI
 
 #See below for the dice unicode:
 #'\u2680' = dice-one
@@ -127,6 +129,11 @@ def reroll():
         if dice_kept[i].get() == '':
             dice_rolled[i].set(random.choice(dice))
 
+def duplicate(ls):
+    fls=[]
+    ans=[]
+    
+
 def endTurn():
     new_total = total.get() + points.get()
     total.set(new_total)
@@ -147,6 +154,8 @@ def reset():
         dice_btns[i].config(relief=RAISED)
     points.set(0)
     total.set(0)
+    pointsAI.set(0)
+    totalAI.set(0)
 
 #Forget is like reset, except it only keeps the total amount of points.
 def forget():
@@ -157,6 +166,7 @@ def forget():
         if len(dice_btns) != 0:
             dice_btns[i].config(relief=RAISED)
     points.set(0)
+    pointsAI.set(0)
 
 def newWin1():
     win1 = Toplevel(root)
@@ -171,8 +181,12 @@ def newWin1():
     #DICE
     frame = Frame(win1)
     frame.pack()
+    duplicates = duplicate(dice_rolled)
     for i in range(0, 6):
-        ans = Button(frame, textvariable=dice_rolled[i], height=1, width=2, font=("Helvetica", 20), command=lambda i=i : keep_dice(i))
+        if dice_rolled[i] == '\u2680':
+            ans = Button(frame, textvariable=dice_rolled[i], height=1, width=2, bg="blue", fg="white", font=("Helvetica", 20), command=lambda i=i : keep_dice(i))
+        else:
+            ans = Button(frame, textvariable=dice_rolled[i], height=1, width=2, font=("Helvetica", 20), command=lambda i=i : keep_dice(i))
         ans.pack(side=LEFT)
         dice_btns.append(ans)
     result_lbls = Label(win1, textvariable=stringme, bg="green", fg="white", font=("Helvetica", 30)).pack()
@@ -190,6 +204,8 @@ def newWin1():
     #SCOREBOARD
     score_lbl = Label(win1, textvariable=points, bg="green", fg="white", font=("Helvetica", 16)).pack()
     total_lbl = Label(win1, textvariable=total, bg="green", fg="white", font=("Helvetica", 16)).pack()
+    scoreAI_lbl = Label(win1, textvariable=pointsAI, bg="green", fg="white", font=("Helvetica", 16)).pack()
+    totalAI_lbl = Label(win1, textvariable=totalAI, bg="green", fg="white", font=("Helvetica", 16)).pack()
     reset_btn = Button(win1, text="reset", height=3, width=20, bg="blue", fg="white", command=reset).pack(pady=10)
 
 def newWin2():
@@ -209,6 +225,8 @@ def newWin2():
     reset_btn = Button(win2, text="reset", height=3, width=20, bg="blue", fg="white", command=reset).pack(pady=10)
     score_lbl = Label(win2, textvariable=points, bg="green", fg="white", font=("Helvetica", 16)).pack()
     total_lbl = Label(win2, textvariable=total, bg="green", fg="white", font=("Helvetica", 16)).pack()
+    scoreAI_lbl = Label(win2, textvariable=pointsAI, bg="green", fg="white", font=("Helvetica", 16)).pack()
+    totalAI_lbl = Label(win2, textvariable=totalAI, bg="green", fg="white", font=("Helvetica", 16)).pack()
 
 def newWin3():
     win3 = Toplevel(root)
@@ -227,6 +245,8 @@ def newWin3():
     reset_btn = Button(win3, text="reset", height=3, width=20, bg="blue", fg="white", command=reset).pack(pady=10)
     score_lbl = Label(win3, textvariable=points, bg="green", fg="white", font=("Helvetica", 16)).pack()
     total_lbl = Label(win3, textvariable=total, bg="green", fg="white", font=("Helvetica", 16)).pack()
+    scoreAI_lbl = Label(win3, textvariable=pointsAI, bg="green", fg="white", font=("Helvetica", 16)).pack()
+    totalAI_lbl = Label(win3, textvariable=totalAI, bg="green", fg="white", font=("Helvetica", 16)).pack()
 
 def newWin4():
     win4 = Toplevel(root)
@@ -245,7 +265,27 @@ def newWin4():
     reset_btn = Button(win4, text="reset", height=3, width=20, bg="blue", fg="white", command=reset).pack(pady=10)
     score_lbl = Label(win4, textvariable=points, bg="green", fg="white", font=("Helvetica", 16)).pack()
     total_lbl = Label(win4, textvariable=total, bg="green", fg="white", font=("Helvetica", 16)).pack()
+    scoreAI_lbl = Label(win4, textvariable=pointsAI, bg="green", fg="white", font=("Helvetica", 16)).pack()
+    totalAI_lbl = Label(win4, textvariable=totalAI, bg="green", fg="white", font=("Helvetica", 16)).pack()
 
+def instruction():
+    win5 = Toplevel(root)
+    root.eval(f'tk::PlaceWindow {str(win5)} center') # center screen
+    win5.title("How to Play")
+    win5.geometry("500x500")
+    win5.config(bg="green")
+    win5.resizable(False, False)
+    frame = Frame(win5)
+    frame.pack()
+    title1_lbl = Label(win5, text="1. Overview of the Game", bg="black", fg="white", font=("Helvetica", 16)).pack()
+    text1_lbl = Label(win5, text="", bg="black", fg="white", font=("Helvetica", 10)).pack()
+    title2_lbl = Label(win5, text="2. How to Play", bg="black", fg="white", font=("Helvetica", 16)).pack()
+    text2_lbl = Label(win5, text="", bg="black", fg="white", font=("Helvetica", 10)).pack()
+    title3_lbl = Label(win5, text="3. Scoring", bg="black", fg="white", font=("Helvetica", 16)).pack()
+    text3_lbl = Label(win5, text="", bg="black", fg="white", font=("Helvetica", 10)).pack()
+    title4_lbl = Label(win5, text="4. Winning the Game", bg="black", fg="white", font=("Helvetica", 16)).pack()
+    text4a_lbl = Label(win5, text="The game continues until one of the players has reached 10000 as their total score.", bg="black", fg="white", font=("Helvetica", 10)).pack()
+    text4b_lbl = Label(win5, text="The first player to reach 10000 points is the winner.", bg="black", fg="white", font=("Helvetica", 10)).pack()
 
 # Varaiables with location
 title_lbl = Label(root, text="10,000 Dice", fg="white", bg="green", font=("Helvetica", 16)).pack()
@@ -254,6 +294,7 @@ user1_btn = Button(root, text="one", height=3, width=20, bg="blue", fg="white", 
 user2_btn = Button(root, text="two", height=3, width=20, bg="blue", fg="white", command=newWin2).pack(pady=10)
 user3_btn = Button(root, text="three", height=3, width=20, bg="blue", fg="white", command=newWin3).pack(pady=10)
 user4_btn = Button(root, text="four", height=3, width=20, bg="blue", fg="white", command=newWin4).pack(pady=10)
+help_btn = Button(root, text="help", height=3, width=20, bg="blue", fg="white", command=instruction).pack(pady=10)
 quit_btn = Button(root, text="quit", height=3, width=20, bg="blue", fg="white", command=on_closing).pack(pady=10)
 
 root.mainloop()
