@@ -10,7 +10,7 @@ root.geometry("400x400")
 root.config(bg="green")
 root.resizable(False, False) #Disallow players from resizing the window.
 dice_btns = []
-curr_pts = 0
+curr_pts=IntVar()
 points=IntVar() # the current amount of points
 total=IntVar() #the total amount of points
 
@@ -70,8 +70,8 @@ def keep_dice(args):#counts dice overall to test for 3s
     elif dice_kept[args].get() == '':
         curr_dice[args].set('')
         button.config(relief=RAISED)
-    curr_pts = calc_points()
-    points.set(points.get()-current_score+curr_pts)
+    curr = calc_points()
+    points.set(points.get()-current_score+curr)
     #reset dice and continue to roll
 
 def is_triple_position(arg):
@@ -141,29 +141,32 @@ def calc_points():#counts dice for current for points
 ##        total.set(new_total)
 
 def reroll():
-    count=0
+    count = 0
+    #reroll unchosen dice
     for i in range(0, 6):
-        if curr_dice[i].get() != '':#loop to add chosen dice to keep set
+        if curr_dice[i].get() != '':#add chosen dice to keep set
             dice_kept[i].set(curr_dice[i].get())
-        if dice_kept[i].get() != '':#loop to check for full chosen dice
-            count+=1
-        if dice_kept[i].get() == '':#loop to reset dice
+        if dice_kept[i].get() != '':#check for full chosen dice
+            count += 1
+        if dice_kept[i].get() == '':#reset unkept dice
             dice_rolled[i].set(random.choice(dice))
-
-    if count == 6:#if all dice have been kept, then reset curr and kept and rolled just none of the points
+    #if all dice have been kept, then reset curr and kept and rolled just none of the points
+    if count == 6:
+        curr_pts.set(points.get())#keep track of points for zilch purposes
         randomGen()
 
 
     for i in range(0, 6):#no points then turn endeth and no points received
         if dice_kept[i].get() == '':
             curr_dice[i].set(dice_rolled[i].get())
-    pts = points.get()
-    cal = calc_points()#somehow current dice are not being accounted for even while added, check loop above or calc meth
-    if points.get()-calc_points() == 0:
-        calc_points()
+    pts=points.get()
+    clc=calc_points()
+    cur=curr_pts.get()
+    if points.get()-calc_points()-curr_pts.get() == 0:
         #Zilch turn
+        messagebox.showinfo("info", "No Points left, End of turn")
         points.set(0)
-        #endTurn()
+        endTurn()
     else:
         for i in range(0, 6):
             if dice_kept[i].get() == '':
