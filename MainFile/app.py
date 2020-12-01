@@ -245,9 +245,11 @@ def newWin1():
     #SCOREBOARD
     player_lbl = Label(win1, text="Player's points", bg="green", fg="white", font=("Helvetica", 16)).pack()
     score_lbl = Label(win1, textvariable=points, bg="green", fg="white", font=("Helvetica", 16)).pack()
+    player2_lbl = Label(win1, text="Player's total", bg="green", fg="white", font=("Helvetica", 16)).pack()
     total_lbl = Label(win1, textvariable=total, bg="green", fg="white", font=("Helvetica", 16)).pack()
     AI_lbl = Label(win1, text="AI's points", bg="green", fg="white", font=("Helvetica", 16)).pack()
     scoreAI_lbl = Label(win1, textvariable=pointsAI, bg="green", fg="white", font=("Helvetica", 16)).pack()
+    AI2_lbl = Label(win1, text="AI's total", bg="green", fg="white", font=("Helvetica", 16)).pack()
     totalAI_lbl = Label(win1, textvariable=totalAI, bg="green", fg="white", font=("Helvetica", 16)).pack()
     reset_btn = Button(win1, text="reset", height=3, width=20, bg="blue", fg="white", command=reset).pack(pady=10)
 
