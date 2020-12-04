@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox #Needed for exit function.
 import random
+import time
 
 #Window variables
 root = Tk()
@@ -46,7 +47,7 @@ def randomGen():
     for i in range(0, 6):
         dice_rolled[i].set(random.choice(dice))
 
-    dice_count = [0] * 6
+    #dice_count = [0] * 6
     for i in range(0, 6):
         if (dice_rolled[i].get() == dice[0]):
             dice_count[0] += 1
@@ -191,6 +192,110 @@ def endTurn():
     if (total.get() >= 10000):
         messagebox.showinfo("info", "You won!")
     forget()
+    AITurn()
+
+def AITurn():
+    #initial roll
+    randomGen()
+    root.update()
+    time.sleep(3)
+    zero = False
+    while TRUE:
+        #scoring
+        temp_score = 0
+        temp_score += 100 * dice_count[0]  # Add 100 for each dice with value 1.
+        temp_score += 50 * dice_count[4]  # Add 50 for each dice with value 5.
+        straight_count = 0
+        pair_count = 0
+        ls = []
+        # This for loop will count how many pairs or straights are there.
+        for i in range(0, 6):
+            if dice_count[i] == 1:
+                straight_count += 1
+            elif dice_count[i] == 2:
+                pair_count += 1
+            elif dice_count[i] > 2:
+                if i == 0:
+                    temp_score += 1000 * (dice_count[i] - 2) - (100 * dice_count[i])
+                elif i == 4:
+                    temp_score += 5 * 100 * (dice_count[i] - 2) - (50 * dice_count[i])
+                else:
+                    temp_score += (i + 1) * 100 * (dice_count[i] - 2)
+                ls.append(i); #include all triples or more
+
+        if straight_count == 6:
+            temp_score += 350  # Add 350 points if all 6 dice are a straight.
+        if pair_count == 3:
+            temp_score += 500  # Add 500 points if there are 3 pairs of dice.
+            if dice_count[0] > 0:
+                temp_score -= 100 * dice_count[0]  # Subtract 100 for each 1.
+            if dice_count[4] > 0:
+                temp_score -= 50 * dice_count[0]  # Subtract 50 for each 5.
+        if temp_score == 0:
+            zero = True
+        pointsAI.set(pointsAI.get()+temp_score)
+
+        #keeping dice
+        keptcount=0
+        for i in range(0, 6):
+            button = dice_btns[i]
+            if dice_rolled[i].get() == dice[0] or dice_rolled[i].get() == dice[4]:
+                curr_dice[i].set(dice_rolled[i].get())
+                button.config(relief=SUNKEN)
+            if len(ls) == 1 and dice_rolled[i].get() == dice[ls[0]]:
+                curr_dice[i].set(dice_rolled[i].get())
+                button.config(relief=SUNKEN)
+            if len(ls) == 2 and (dice_rolled[i].get() == dice[ls[0]] or dice_rolled[i].get() == dice[ls[1]]):
+                curr_dice[i].set(dice_rolled[i].get())
+                button.config(relief=SUNKEN)
+            if curr_dice[i].get() != "":
+                keptcount+=1;
+            dice_count[i] = 0
+        root.update()
+        time.sleep(3)
+
+        #reroll or endturn
+        if keptcount < 4 and not zero:
+            count = 0
+            # Reroll only the dice that are not chosen yet.
+            for i in range(0, 6):
+                if curr_dice[i].get() != '':  # add chosen dice to keep set
+                    dice_kept[i].set(curr_dice[i].get())
+                if dice_kept[i].get() != '':  # check for full chosen dice
+                    count += 1
+                if dice_kept[i].get() == '':  # reset only the unkept dice
+                    dice_rolled[i].set(random.choice(dice))
+
+            # recalc dice_count
+            for i in range(0, 6):
+                if curr_dice[i].get() == '':
+                    if (dice_rolled[i].get() == dice[0]):
+                        dice_count[0] += 1
+                    if (dice_rolled[i].get() == dice[1]):
+                        dice_count[1] += 1
+                    if (dice_rolled[i].get() == dice[2]):
+                        dice_count[2] += 1
+                    if (dice_rolled[i].get() == dice[3]):
+                        dice_count[3] += 1
+                    if (dice_rolled[i].get() == dice[4]):
+                        dice_count[4] += 1
+                    if (dice_rolled[i].get() == dice[5]):
+                        dice_count[5] += 1
+            # if all dice have been kept, then reset curr and kept,
+            # and rolled to indicate none of the points.
+            if count == 6:
+                curr_pts.set(points.get())  # Keep track of current points.
+                randomGen()
+            root.update()
+            time.sleep(3)
+        else:
+            totalAI.set(totalAI.get()+pointsAI.get())
+            pointsAI.set(0)
+            if (totalAI.get() >= 10000):
+                messagebox.showinfo("info", "You Lost!")
+            forget()
+            return
+
 
         
 #Reset sets all values to default, including the total amount of points.
@@ -209,6 +314,7 @@ def reset():
 #Forget resets only the dice
 def forget():
     for i in range(0, 6):
+        dice_count[i] = 0
         dice_rolled[i].set("")
         dice_kept[i].set("")
         curr_dice[i].set("")
