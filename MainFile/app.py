@@ -215,7 +215,7 @@ def AITurn():
                 temp_score -= 100 * dice_count[0]  # Subtract 100 for each 1.
             if dice_count[4] > 0:
                 temp_score -= 50 * dice_count[0]  # Subtract 50 for each 5.
-        if temp_score == 0:
+        if temp_score-turn_score == 0:
             zero = True
         pointsAI.set(pointsAI.get()+temp_score-turn_score)
         turn_score = temp_score
@@ -273,7 +273,8 @@ def AITurn():
             root.update()
             time.sleep(3)
         else:
-            totalAI.set(totalAI.get()+pointsAI.get())
+            if not zero:
+                totalAI.set(totalAI.get()+pointsAI.get())
             pointsAI.set(0)
             if (totalAI.get() >= 10000):
                 messagebox.showinfo("info", "You Lost!")
