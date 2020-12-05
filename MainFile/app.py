@@ -1,3 +1,183 @@
+from tkinter import *
+from tkinter import messagebox #Needed for exit function.
+import random
+import time
+
+#Window variables
+root = Tk()
+root.title('tk::PlaceWindow . center')
+root.title('10,000 Dice')
+root.geometry("400x400")
+root.config(bg="green")
+root.resizable(False, False) #Disallow players from resizing the window.
+dice_btns = []
+curr_pts = IntVar()
+points=IntVar() # the current amount of points
+total=IntVar() #the total amount of points
+pointsAI=IntVar()
+totalAI=IntVar()
+turnVar=StringVar()
+
+#See below for the dice unicode:
+#'\u2680' = dice-one
+#'\u2681' = dice-two
+#'\u2682' = dice-three
+#'\u2683' = dice-four
+#'\u2684' = dice-five
+#'\u2685' = dice-six
+dice = ['\u2680', '\u2681', '\u2682', '\u2683', '\u2684', '\u2685']
+dice_rolled=[]
+dice_kept=[]
+curr_dice=[]
+dice_count=[0] * 6
+
+for i in range(0, 6):
+    dice_rolled.append(StringVar())
+    dice_kept.append(StringVar())
+    curr_dice.append(StringVar())
+
+# MessageBox on Close
+#This triggers only if the player exits the game.
+def on_closing():
+    if messagebox.askokcancel("Quit", "Do you want to quit?"):
+        root.destroy()
+root.protocol("WM_DELETE_WINDOW", on_closing) # message box
+
+def randomGen():
+    forget()
+    for i in range(0, 6):
+        dice_rolled[i].set(random.choice(dice))
+
+    #dice_count = [0] * 6
+    for i in range(0, 6):
+        if (dice_rolled[i].get() == dice[0]):
+            dice_count[0] += 1
+        if (dice_rolled[i].get() == dice[1]):
+            dice_count[1] += 1
+        if (dice_rolled[i].get() == dice[2]):
+            dice_count[2] += 1
+        if (dice_rolled[i].get() == dice[3]):
+            dice_count[3] += 1
+        if (dice_rolled[i].get() == dice[4]):
+            dice_count[4] += 1
+        if (dice_rolled[i].get() == dice[5]):
+            dice_count[5] += 1
+
+def keep_dice(args):#counts dice overall to test for 3s
+    current_score = calc_points()
+    button = dice_btns[args]
+    #add dice to score if unadded
+    if dice_kept[args].get() == '' and curr_dice[args].get() == '':
+        curr_dice[args].set(dice_rolled[args].get())
+        button.config(relief=SUNKEN)
+    #take dice from score if already added
+    elif dice_kept[args].get() == '':
+        curr_dice[args].set('')
+        button.config(relief=RAISED)
+    curr = calc_points()
+    points.set(points.get()-current_score+curr)
+    #reset dice and continue to roll
+
+def is_triple_position(arg):
+    face = 0
+    if (dice_rolled[arg].get() == dice[0]):
+        face = 0
+    if (dice_rolled[arg].get() == dice[1]):
+        face = 1
+    if (dice_rolled[arg].get() == dice[2]):
+        face = 2
+    if (dice_rolled[arg].get() == dice[3]):
+        face = 3
+    if (dice_rolled[arg].get() == dice[4]):
+        face = 4
+    if (dice_rolled[arg].get() == dice[5]):
+        face = 5
+    return dice_count[face] > 2
+        
+def calc_points():#counts dice for current for points
+    temp_score = 0
+    curr_dice_count = [0] * 6
+    for i in range(0, 6):
+        if (curr_dice[i].get() == dice[0]):
+            curr_dice_count[0] += 1
+        if (curr_dice[i].get() == dice[1]):
+            curr_dice_count[1] += 1
+        if (curr_dice[i].get() == dice[2]):
+            curr_dice_count[2] += 1
+        if (curr_dice[i].get() == dice[3]):
+            curr_dice_count[3] += 1
+        if (curr_dice[i].get() == dice[4]):
+            curr_dice_count[4] += 1
+        if (curr_dice[i].get() == dice[5]):
+            curr_dice_count[5] += 1
+    temp_score += 100 * curr_dice_count[0] #Add 100 for each dice with value 1.
+    temp_score += 50 * curr_dice_count[4] #Add 50 for each dice with value 5.
+    straight_count = 0
+    pair_count = 0
+    #This for loop will count how many pairs or straights are there.
+    for i in range(0,6):
+        if curr_dice_count[i] == 1:
+            straight_count += 1
+        elif curr_dice_count[i] == 2:
+            pair_count += 1
+        elif curr_dice_count[i] > 2:
+            if i == 0:
+                temp_score += 1000 * (curr_dice_count[i]-2) - (100*curr_dice_count[i])
+            elif i == 4:
+                temp_score += 5 * 100 * (curr_dice_count[i]-2) - (50*curr_dice_count[i])
+            else:
+                temp_score += (i+1) * 100 * (curr_dice_count[i]-2)
+
+    if straight_count == 6:
+        temp_score += 350 #Add 350 points if all 6 dice are a straight.
+    if pair_count == 3:
+        temp_score += 500 #Add 500 points if there are 3 pairs of dice.
+        if curr_dice_count[0] > 0:
+            temp_score -= 100 * curr_dice_count[0] #Subtract 100 for each 1.
+        if curr_dice_count[4] > 0:
+            temp_score -= 50 * curr_dice_count[0] #Subtract 50 for each 5.
+    return temp_score
+##    #Display this message box below only if the player can't score.
+##    if points.get() == 0:
+##        messagebox.showinfo("info", "No Points left, End of turn")
+##    else:
+##        new_total = total.get() + points.get()
+##        total.set(new_total)
+
+def reroll():
+    count=0
+    #Reroll only the dice that are not chosen yet.
+    for i in range(0, 6):
+        if curr_dice[i].get() != '':#add chosen dice to keep set
+            dice_kept[i].set(curr_dice[i].get())
+        if dice_kept[i].get() != '':#check for full chosen dice
+            count+=1
+        if dice_kept[i].get() == '':#reset only the unkept dice
+            dice_rolled[i].set(random.choice(dice))
+            
+    #if all dice have been kept, then reset curr and kept,
+    #and rolled to indicate none of the points.
+    if count == 6:
+        curr_pts.set(points.get())#Keep track of current points.
+        randomGen()
+
+
+    for i in range(0, 6):#no points? then turn end and no points received
+        if dice_kept[i].get() == '':
+            curr_dice[i].set(dice_rolled[i].get())
+    pts = points.get()
+    cal = calc_points()#somehow current dice are not being accounted for even while added, check loop above or calc meth
+    if points.get()-calc_points() == 0:
+        calc_points()
+    pts=points.get()
+    clc=calc_points()
+    cur=curr_pts.get()
+    if points.get()-calc_points()-curr_pts.get() == 0:
+        #Display the message to indicate the player can't score points.
+        messagebox.showinfo("info", "Sorry, no points earned, End of turn")
+        points.set(0)
+        endTurn()
+    else:
         for i in range(0, 6):
             if dice_kept[i].get() == '':
                 curr_dice[i].set('')
