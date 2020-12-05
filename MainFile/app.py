@@ -67,6 +67,7 @@ def randomGen():
 
 def keep_dice(args):#counts dice overall to test for 3s
     if not AIturn:
+        global chosenDice
         chosenDice=True
         current_score = calc_points()
         button = dice_btns[args]
@@ -131,7 +132,7 @@ def calc_points():#counts dice for current for points
 def reroll():
     global chosenDice
     if not chosenDice:
-        messagebox.showinfo("info", "You chose a dice to continue. ")
+            messagebox.showinfo("info", "You must choose a dice to continue. ")
     else:
         chosenDice = False
         count=0
@@ -158,6 +159,7 @@ def reroll():
         if count == 6:
             curr_pts.set(points.get())#Keep track of current points.
             randomGen()
+            points.set(curr_pts.get())
 
         for i in range(0, 6):#no points? then turn end and no points received
             if dice_kept[i].get() == '':
@@ -316,8 +318,9 @@ def reset():
     pointsAI.set(0)
     totalAI.set(0)
 
-#Forget resets only the dice
+#Forget resets only the dice and player points
 def forget():
+    points.set(0)
     for i in range(0, 6):
         dice_count[i] = 0
         dice_rolled[i].set("")
