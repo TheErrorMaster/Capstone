@@ -122,23 +122,32 @@ def calc_points():#counts dice for current for points
             temp_score -= 50 * curr_dice_count[0] #Subtract 50 for each 5.
     return temp_score
 
+#reject pointless dice
 def reroll():
     count=0
-    #Reroll only the dice that are not chosen yet.
+    hasNullDice = False
+    #Reroll only the dice that are not chosen yet./dice unchanging score get kicked
     for i in range(0, 6):
         if curr_dice[i].get() != '':#add chosen dice to keep set
-            dice_kept[i].set(curr_dice[i].get())
+            curr_dice[i].set('')
+            if points.get() - calc_points() - curr_pts.get() == 0:
+                dice_btns[i].config(relief=RAISED)
+                hasNullDice =True
+            else:
+                curr_dice[i].set(dice_rolled[i].get())
+                dice_kept[i].set(curr_dice[i].get())
         if dice_kept[i].get() != '':#check for full chosen dice
             count+=1
         if dice_kept[i].get() == '':#reset only the unkept dice
             dice_rolled[i].set(random.choice(dice))
-            
+
+    if hasNullDice:
+        messagebox.showinfo("info", "You have chosen a dice without points, it will be ejected. ")
     #if all dice have been kept, then reset curr and kept,
     #and rolled to indicate none of the points.
     if count == 6:
         curr_pts.set(points.get())#Keep track of current points.
         randomGen()
-
 
     for i in range(0, 6):#no points? then turn end and no points received
         if dice_kept[i].get() == '':
