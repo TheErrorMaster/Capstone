@@ -11,6 +11,7 @@ root.geometry("400x400")
 root.config(bg="green")
 root.resizable(False, False) #Disallow players from resizing the window.
 dice_btns = []
+AIturn =False
 curr_pts = IntVar()
 points=IntVar() # the current amount of points
 total=IntVar() #the total amount of points
@@ -64,19 +65,20 @@ def randomGen():
             dice_count[5] += 1
 
 def keep_dice(args):#counts dice overall to test for 3s
-    current_score = calc_points()
-    button = dice_btns[args]
-    #add dice to score if unadded
-    if dice_kept[args].get() == '' and curr_dice[args].get() == '':
-        curr_dice[args].set(dice_rolled[args].get())
-        button.config(relief=SUNKEN)
-    #take dice from score if already added
-    elif dice_kept[args].get() == '':
-        curr_dice[args].set('')
-        button.config(relief=RAISED)
-    curr = calc_points()
-    points.set(points.get()-current_score+curr)
-    #reset dice and continue to roll
+    if not AIturn:
+        current_score = calc_points()
+        button = dice_btns[args]
+        #add dice to score if unadded
+        if dice_kept[args].get() == '' and curr_dice[args].get() == '':
+            curr_dice[args].set(dice_rolled[args].get())
+            button.config(relief=SUNKEN)
+        #take dice from score if already added
+        elif dice_kept[args].get() == '':
+            curr_dice[args].set('')
+            button.config(relief=RAISED)
+        curr = calc_points()
+        points.set(points.get()-current_score+curr)
+        #reset dice and continue to roll
 
 def calc_points():#counts dice for current for points
     temp_score = 0
@@ -130,6 +132,8 @@ def reroll():
     for i in range(0, 6):
         if curr_dice[i].get() != '':#add chosen dice to keep set
             curr_dice[i].set('')
+            pts = points.get()
+            cal = calc_points()
             if points.get() - calc_points() - curr_pts.get() == 0:
                 dice_btns[i].config(relief=RAISED)
                 hasNullDice =True
@@ -176,7 +180,7 @@ def endTurn():
     new_total = total.get() + points.get()
     total.set(new_total)
     points.set(0)
-
+    curr_pts.set(0)
     # Is the total number of points greater than or equal to 10000?
     # If yes, then display the winning message.
     if (total.get() >= 10000):
@@ -187,6 +191,7 @@ def endTurn():
 def AITurn():
     #initial roll
     turnVar.set("AI's turn")
+    AIturn=True
     randomGen()
 
     root.update()
@@ -289,6 +294,7 @@ def AITurn():
                 messagebox.showinfo("info", "You Lost!")
             forget()
             turnVar.set("Player's turn")
+            AIturn=False
             return
         
 #Reset sets all values to default, including the total amount of points.
