@@ -240,8 +240,8 @@ def find6Kind(a):
 def ai():
     dice = 6 # we start with 6 dice
     score = 0
-    # randice = randomDice(dice)
-    randice = [2,2,3,3,4,4]
+    randice = randomDice(dice)
+    #randice = [2,2,3,3,4,4]
     while dice >= 3:
         print(randice)
         str8 = straight(randice)

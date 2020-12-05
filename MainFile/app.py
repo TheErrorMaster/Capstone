@@ -16,6 +16,7 @@ points=IntVar() # the current amount of points
 total=IntVar() #the total amount of points
 pointsAI=IntVar()
 totalAI=IntVar()
+turnVar=StringVar()
 
 #See below for the dice unicode:
 #'\u2680' = dice-one
@@ -196,9 +197,12 @@ def endTurn():
 
 def AITurn():
     #initial roll
+    turnVar.set("AI's turn")
     randomGen()
+
     root.update()
     time.sleep(3)
+
     zero = False
     while TRUE:
         #scoring
@@ -294,9 +298,8 @@ def AITurn():
             if (totalAI.get() >= 10000):
                 messagebox.showinfo("info", "You Lost!")
             forget()
+            turnVar.set("Player's turn")
             return
-
-
         
 #Reset sets all values to default, including the total amount of points.
 def reset():
@@ -329,6 +332,8 @@ def newWin1():
     win1.geometry("450x600")
     win1.config(bg="green")
     win1.resizable(False, False)
+    turnVar.set("Player's turn")
+    turn_lbl = Label(win1, textvariable=turnVar, bg="green", fg="white", font=("Helvetica", 16)).pack()
     roll_btn = Button(win1, text="roll", height=3, width=20, bg="blue", fg="white", command=randomGen).pack(pady=10)
 
     #DICE
@@ -341,14 +346,12 @@ def newWin1():
     #TURN OPTIONS
     frame2 = Frame(win1, bg = "green")
     frame2.pack()
-    rollon_btn = Button(frame2, text="Keep points and \nRoll the remaining dice", height=3, width=20, bg="blue", fg="white", command=reroll)
-    rollon_btn.pack(side=LEFT)
-    rollon_btn.pack(padx=10)
-    endturn_btn = Button(frame2, text="End Turn and \nAdd Points to Score", height=3, width=20, bg="blue", fg="white", command=endTurn)
-    endturn_btn.pack(padx=10)
-    endturn_btn.pack(side=LEFT)
+    rollon_btn = Button(frame2, text="Keep points and \nRoll the remaining dice", height=3, width=20, bg="blue", fg="white", command=reroll).pack(side=LEFT, padx=10, pady=10)
+    endturn_btn = Button(frame2, text="End Turn and \nAdd Points to Score", height=3, width=20, bg="blue", fg="white", command=endTurn).pack(padx=10, side=LEFT, pady=10)
 
     #SCOREBOARD
+    frame3 = Frame(win1, bg="green")
+    frame3.pack()
     player_lbl = Label(win1, text="Player's points", bg="green", fg="white", font=("Helvetica", 16)).pack()
     score_lbl = Label(win1, textvariable=points, bg="green", fg="white", font=("Helvetica", 16)).pack()
     player2_lbl = Label(win1, text="Player's total", bg="green", fg="white", font=("Helvetica", 16)).pack()
