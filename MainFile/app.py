@@ -11,7 +11,8 @@ root.geometry("400x400")
 root.config(bg="green")
 root.resizable(False, False) #Disallow players from resizing the window.
 dice_btns = []
-AIturn =False
+AIturn = False
+chosenDice = False
 curr_pts = IntVar()
 points=IntVar() # the current amount of points
 total=IntVar() #the total amount of points
@@ -66,6 +67,7 @@ def randomGen():
 
 def keep_dice(args):#counts dice overall to test for 3s
     if not AIturn:
+        chosenDice=True
         current_score = calc_points()
         button = dice_btns[args]
         #add dice to score if unadded
@@ -125,55 +127,59 @@ def calc_points():#counts dice for current for points
     return temp_score
 
 #reject pointless dice
+#do not allow reroll if no dice chosen
 def reroll():
-    count=0
-    hasNullDice = False
-    #Reroll only the dice that are not chosen yet./dice unchanging score get kicked
-    for i in range(0, 6):
-        if curr_dice[i].get() != '':#add chosen dice to keep set
-            curr_dice[i].set('')
-            pts = points.get()
-            cal = calc_points()
-            if points.get() - calc_points() - curr_pts.get() == 0:
-                dice_btns[i].config(relief=RAISED)
-                hasNullDice =True
-            else:
-                curr_dice[i].set(dice_rolled[i].get())
-                dice_kept[i].set(curr_dice[i].get())
-        if dice_kept[i].get() != '':#check for full chosen dice
-            count+=1
-        if dice_kept[i].get() == '':#reset only the unkept dice
-            dice_rolled[i].set(random.choice(dice))
-
-    if hasNullDice:
-        messagebox.showinfo("info", "You have chosen a dice without points, it will be ejected. ")
-    #if all dice have been kept, then reset curr and kept,
-    #and rolled to indicate none of the points.
-    if count == 6:
-        curr_pts.set(points.get())#Keep track of current points.
-        randomGen()
-
-    for i in range(0, 6):#no points? then turn end and no points received
-        if dice_kept[i].get() == '':
-            curr_dice[i].set(dice_rolled[i].get())
-    pts = points.get()
-    cal = calc_points()#somehow current dice are not being accounted for even while added, check loop above or calc meth
-    if points.get()-calc_points() == 0:
-        calc_points()
-    pts=points.get()
-    clc=calc_points()
-    cur=curr_pts.get()
-
-    root.update()
-    if points.get()-calc_points()-curr_pts.get() == 0:
-        #Display the message to indicate the player can't score points.
-        messagebox.showinfo("info", "Sorry, no points earned, End of turn")
-        points.set(0)
-        endTurn()
+    global chosenDice
+    if not chosenDice:
+        messagebox.showinfo("info", "You chose a dice to continue. ")
     else:
+        chosenDice = False
+        count=0
+        hasNullDice = False
+        #Reroll only the dice that are not chosen yet./dice unchanging score get kicked
         for i in range(0, 6):
-            if dice_kept[i].get() == '':
+            if curr_dice[i].get() != '':#add chosen dice to keep set
                 curr_dice[i].set('')
+                if points.get() - calc_points() - curr_pts.get() == 0:
+                    dice_btns[i].config(relief=RAISED)
+                    hasNullDice =True
+                else:
+                    curr_dice[i].set(dice_rolled[i].get())
+                    dice_kept[i].set(curr_dice[i].get())
+            if dice_kept[i].get() != '':#check for full chosen dice
+                count+=1
+            if dice_kept[i].get() == '':#reset only the unkept dice
+                dice_rolled[i].set(random.choice(dice))
+
+        if hasNullDice:
+            messagebox.showinfo("info", "You have chosen a dice without points, it will be ejected. ")
+        #if all dice have been kept, then reset curr and kept,
+        #and rolled to indicate none of the points.
+        if count == 6:
+            curr_pts.set(points.get())#Keep track of current points.
+            randomGen()
+
+        for i in range(0, 6):#no points? then turn end and no points received
+            if dice_kept[i].get() == '':
+                curr_dice[i].set(dice_rolled[i].get())
+        pts = points.get()
+        cal = calc_points()#somehow current dice are not being accounted for even while added, check loop above or calc meth
+        if points.get()-calc_points() == 0:
+            calc_points()
+        pts=points.get()
+        clc=calc_points()
+        cur=curr_pts.get()
+
+        root.update()
+        if points.get()-calc_points()-curr_pts.get() == 0:
+            #Display the message to indicate the player can't score points.
+            messagebox.showinfo("info", "Sorry, no points earned, End of turn")
+            points.set(0)
+            endTurn()
+        else:
+            for i in range(0, 6):
+                if dice_kept[i].get() == '':
+                    curr_dice[i].set('')
 
 
 def endTurn():
