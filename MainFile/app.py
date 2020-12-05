@@ -78,22 +78,6 @@ def keep_dice(args):#counts dice overall to test for 3s
     points.set(points.get()-current_score+curr)
     #reset dice and continue to roll
 
-def is_triple_position(arg):
-    face = 0
-    if (dice_rolled[arg].get() == dice[0]):
-        face = 0
-    if (dice_rolled[arg].get() == dice[1]):
-        face = 1
-    if (dice_rolled[arg].get() == dice[2]):
-        face = 2
-    if (dice_rolled[arg].get() == dice[3]):
-        face = 3
-    if (dice_rolled[arg].get() == dice[4]):
-        face = 4
-    if (dice_rolled[arg].get() == dice[5]):
-        face = 5
-    return dice_count[face] > 2
-        
 def calc_points():#counts dice for current for points
     temp_score = 0
     curr_dice_count = [0] * 6
@@ -137,12 +121,6 @@ def calc_points():#counts dice for current for points
         if curr_dice_count[4] > 0:
             temp_score -= 50 * curr_dice_count[0] #Subtract 50 for each 5.
     return temp_score
-##    #Display this message box below only if the player can't score.
-##    if points.get() == 0:
-##        messagebox.showinfo("info", "No Points left, End of turn")
-##    else:
-##        new_total = total.get() + points.get()
-##        total.set(new_total)
 
 def reroll():
     count=0
@@ -172,6 +150,8 @@ def reroll():
     pts=points.get()
     clc=calc_points()
     cur=curr_pts.get()
+
+    root.update()
     if points.get()-calc_points()-curr_pts.get() == 0:
         #Display the message to indicate the player can't score points.
         messagebox.showinfo("info", "Sorry, no points earned, End of turn")
@@ -202,7 +182,7 @@ def AITurn():
 
     root.update()
     time.sleep(3)
-
+    turn_score = 0
     zero = False
     while TRUE:
         #scoring
@@ -237,7 +217,8 @@ def AITurn():
                 temp_score -= 50 * dice_count[0]  # Subtract 50 for each 5.
         if temp_score == 0:
             zero = True
-        pointsAI.set(pointsAI.get()+temp_score)
+        pointsAI.set(pointsAI.get()+temp_score-turn_score)
+        turn_score = temp_score
 
         #keeping dice
         keptcount=0
@@ -259,7 +240,7 @@ def AITurn():
         time.sleep(3)
 
         #reroll or endturn
-        if keptcount < 4 and not zero:
+        if keptcount != 4 and keptcount !=5 and not zero:
             count = 0
             # Reroll only the dice that are not chosen yet.
             for i in range(0, 6):
@@ -272,23 +253,22 @@ def AITurn():
 
             # recalc dice_count
             for i in range(0, 6):
-                if curr_dice[i].get() == '':
-                    if (dice_rolled[i].get() == dice[0]):
-                        dice_count[0] += 1
-                    if (dice_rolled[i].get() == dice[1]):
-                        dice_count[1] += 1
-                    if (dice_rolled[i].get() == dice[2]):
-                        dice_count[2] += 1
-                    if (dice_rolled[i].get() == dice[3]):
-                        dice_count[3] += 1
-                    if (dice_rolled[i].get() == dice[4]):
-                        dice_count[4] += 1
-                    if (dice_rolled[i].get() == dice[5]):
-                        dice_count[5] += 1
+                if (dice_rolled[i].get() == dice[0]):
+                    dice_count[0] += 1
+                if (dice_rolled[i].get() == dice[1]):
+                    dice_count[1] += 1
+                if (dice_rolled[i].get() == dice[2]):
+                    dice_count[2] += 1
+                if (dice_rolled[i].get() == dice[3]):
+                    dice_count[3] += 1
+                if (dice_rolled[i].get() == dice[4]):
+                    dice_count[4] += 1
+                if (dice_rolled[i].get() == dice[5]):
+                    dice_count[5] += 1
             # if all dice have been kept, then reset curr and kept,
             # and rolled to indicate none of the points.
             if count == 6:
-                curr_pts.set(points.get())  # Keep track of current points.
+                turn_score=0
                 randomGen()
             root.update()
             time.sleep(3)
