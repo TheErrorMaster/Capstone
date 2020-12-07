@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="31af9a2a-ebf8-4f64-b4e2-fd0e87545329" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/MainFile/ai.py" beforeDir="false" afterPath="$PROJECT_DIR$/MainFile/ai.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MainFile/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/MainFile/app.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -24,7 +24,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/MainFile/ai.py" />
   </component>
-  <component name="RunManager" selected="Python.ai">
+  <component name="RunManager" selected="Python.ap">
     <configuration name="ai" type="PythonConfigurationType" factoryName="Python">
       <module name="Capstone" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -98,22 +98,22 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="548" y="168" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1607051590824" />
-    <state width="1515" height="24" key="GridCell.Tab.0.bottom" timestamp="1607052747911">
+    <state width="1515" height="24" key="GridCell.Tab.0.bottom" timestamp="1607303084152">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="24" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1607052747911" />
-    <state width="1515" height="24" key="GridCell.Tab.0.center" timestamp="1607052747911">
+    <state width="1515" height="24" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1607303084152" />
+    <state width="1515" height="24" key="GridCell.Tab.0.center" timestamp="1607303084152">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="24" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1607052747911" />
-    <state width="1515" height="24" key="GridCell.Tab.0.left" timestamp="1607052747910">
+    <state width="1515" height="24" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1607303084152" />
+    <state width="1515" height="24" key="GridCell.Tab.0.left" timestamp="1607303084152">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="24" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1607052747910" />
-    <state width="1515" height="24" key="GridCell.Tab.0.right" timestamp="1607052747911">
+    <state width="1515" height="24" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1607303084152" />
+    <state width="1515" height="24" key="GridCell.Tab.0.right" timestamp="1607303084152">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="24" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1607052747911" />
+    <state width="1515" height="24" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1607303084152" />
     <state width="1515" height="261" key="GridCell.Tab.1.bottom" timestamp="1607052747897">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -130,27 +130,27 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1515" height="261" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1607052747897" />
-    <state x="465" y="238" key="com.intellij.ide.util.TipDialog" timestamp="1607043288601">
+    <state x="465" y="238" key="com.intellij.ide.util.TipDialog" timestamp="1607291021547">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="465" y="238" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1607043288601" />
+    <state x="465" y="238" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1607291021547" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/MainFile/app.py</url>
-          <line>206</line>
+          <line>208</line>
           <option name="timeStamp" value="6" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/MainFile/app.py</url>
-          <line>259</line>
+          <line>261</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/MainFile/app.py</url>
-          <line>287</line>
+          <line>289</line>
           <option name="timeStamp" value="8" />
         </line-breakpoint>
       </breakpoints>
