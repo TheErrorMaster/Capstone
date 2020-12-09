@@ -118,13 +118,13 @@ def calc_points():#counts dice for current for points
                 temp_score += (i+1) * 100 * (curr_dice_count[i]-2)
 
     if straight_count == 6:
-        temp_score += 350 #Add 350 points if all 6 dice are a straight.
+        temp_score += 1350 #Add 350 points if all 6 dice are a straight.
     if pair_count == 3:
-        temp_score += 500 #Add 500 points if there are 3 pairs of dice.
+        temp_score += 1500 #Add 500 points if there are 3 pairs of dice.
         if curr_dice_count[0] > 0:
             temp_score -= 100 * curr_dice_count[0] #Subtract 100 for each 1.
         if curr_dice_count[4] > 0:
-            temp_score -= 50 * curr_dice_count[0] #Subtract 50 for each 5.
+            temp_score -= 50 * curr_dice_count[4] #Subtract 50 for each 5.
     return temp_score
 
 #reject pointless dice
@@ -153,7 +153,7 @@ def reroll():
                 dice_rolled[i].set(random.choice(dice))
 
         if hasNullDice:
-            messagebox.showinfo("info", "You have chosen a dice without points, it will be ejected. ")
+            messagebox.showinfo("info", "You have chosen dice without points, they will be ejected. ")
         #if all dice have been kept, then reset curr and kept,
         #and rolled to indicate none of the points.
         if count == 6:
@@ -193,8 +193,10 @@ def endTurn():
     # If yes, then display the winning message.
     if (total.get() >= 10000):
         messagebox.showinfo("info", "You won!")
-    forget()
-    AITurn()
+        forget()
+    else:
+        forget()
+        AITurn()
 
 def AITurn():
     #initial roll
@@ -230,13 +232,13 @@ def AITurn():
                 ls.append(i); #include all triples or more
 
         if straight_count == 6:
-            temp_score += 350  # Add 350 points if all 6 dice are a straight.
+            temp_score += 1350  # Add 350 points if all 6 dice are a straight.
         if pair_count == 3:
-            temp_score += 500  # Add 500 points if there are 3 pairs of dice.
+            temp_score += 1500  # Add 500 points if there are 3 pairs of dice.
             if dice_count[0] > 0:
                 temp_score -= 100 * dice_count[0]  # Subtract 100 for each 1.
             if dice_count[4] > 0:
-                temp_score -= 50 * dice_count[0]  # Subtract 50 for each 5.
+                temp_score -= 50 * dice_count[4]  # Subtract 50 for each 5.
         if temp_score-turn_score == 0:
             zero = True
         pointsAI.set(pointsAI.get()+temp_score-turn_score)
@@ -381,9 +383,10 @@ def how_to_play():
     overtit = Label(winHelp, text="1. Overview", bg="green", fg="white", font=("Helvetica", 20)).pack()
     overlbl = Label(winHelp, text="This is the classic dice game 10,000, sometimes known as Farkle.\nA game with 6 dice where you compete to score 10000 before any other player.\nThis can be acheived by making it onto the scoreboard and choosing your points carefully before proceeding to the next roll.\nChosing your points can help you rise into greater scores or fall into the pits of bad chances if you don't choose wisely.", bg="green", fg="white", bd=2, relief="solid", font=("Helvetica", 12)).pack()
     howtotit = Label(winHelp, text="2. How To Play", bg="green", fg="white", font=("Helvetica", 20)).pack()
-    howlbl = Label(winHelp, text="All players start off with the Scoreboard.\n To get onto the Scoreboard, a player must roll at least 1000 points in a single turn.\nEach turn, players start with 6 dice and roll them all.\n From there, players may choose their scoring dice from any points shown on the board.\n After their choice, they may choose to roll the remaining dice OR keep their points (provided they are on the board or the points are above 1000).\n If a player rolls their dice at their start of their turn and there are no points shown, they may re-roll once.\n On any other occasion, if they roll the dice and there are no points shown, that player will forfeit all points and end their turn.\n When a player has scored and chosen all 6 dice, they MUST keep their points for the turn and reroll all dice.\n To win: A player reaching a score at or above 10,000 becomes the temporary winner, then they must keep their lead as all other players get a chance to roll one more turn.\n The highest score after all players have rolled is the Official Winner", bg="green", fg="white", bd=2, relief="solid", font=("Helvetica", 12)).pack()
+    howlbl = Label(winHelp, text="All players start off with the Scoreboard.\nEach turn, players start with 6 dice and roll them all.\n From there, players may choose their scoring dice from any points shown on the board.\n After their choice, they may choose to roll the remaining dice OR keep their points (provided they are on the board or the points are above 1000).\n If a player rolls their dice at their start of their turn and there are no points shown, they may re-roll once.\n On any other occasion, if they roll the dice and there are no points shown, that player will forfeit all points and end their turn.\n When a player has scored and chosen all 6 dice, they MUST keep their points for the turn and reroll all dice.\n To win: A player reaching a score at or above 10,000 becomes the winner.", bg="green", fg="white", bd=2, relief="solid", font=("Helvetica", 12)).pack()
     scoretit = Label(winHelp, text="3. Scoring", bg="green", fg="white", font=("Helvetica", 20)).pack()
-    scorelbl = Label(winHelp, text="1 - 100 points\n5 - 50 points\nThree of a kind of 1 - 1000 points\nThree of a kind of 2 - 200 points \nThree of a kind of 3 - 300 points\nThree of a kind of 4 - 400 points\nThree of a kind of 5 - 500 points\nThree of a kind of 6 - 600 points\nFor each number over three of a kind you add the three of a kind amount again (example 3 2's =200, 4 2's =400, 5 2's =600, 6 2's=800).\nPairs and Straights: When a player rolls 1,2,3,4,5,6 when rolling all 6 dice this is a Straight.\nWhen a player gets 3 sets of pairs when rolling 6 dice this is Pairs. Pairs and Straights are worth 500 points.", bg="green", fg="white", bd=2, relief="solid", font=("Helvetica", 12)).pack()
+    scorelbl = Label(winHelp, text="1 - 100 points\n5 - 50 points\nThree of a kind of 1 - 1000 points\nThree of a kind of 2 - 200 points \nThree of a kind of 3 - 300 points\nThree of a kind of 4 - 400 points\nThree of a kind of 5 - 500 points\nThree of a kind of 6 - 600 points\nFor each number over three of a kind you add the three of a kind amount again (example 3 2's =200, 4 2's =400, 5 2's =600, 6 2's=800).\nPairs and Straights: When a player rolls 1,2,3,4,5,6 when rolling all 6 dice this is a Straight.\nWhen a player gets 3 sets of pairs when rolling 6 dice this is Pairs. Pairs and Straights are worth 1500 points.", bg="green", fg="white", bd=2, relief="solid", font=("Helvetica", 12)).pack()
+
     wintit = Label(winHelp, text="4. Winning the Game", bg="green", fg="white", font=("Helvetica", 20)).pack()
     winlbl = Label(winHelp, text="The game continues until one of the players has reached 10000 as their total score. The first player to reach 10000 points is the winner.", bg="green", fg="white", bd=2, relief="solid", font=("Helvetica", 12)).pack()
 
